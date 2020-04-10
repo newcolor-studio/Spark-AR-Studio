@@ -11,24 +11,29 @@
 // Changelogs - https://fb.me/spark-changelog
 //==============================================================================
 
-// How to load in modules
+// This is an example script for v85+ to display blink count
+
+// Load modules
 const Scene = require('Scene');
 // This module gives us access to objects in the Patch Editor
 const Patches = require('Patches');
-// Use export keyword to make a symbol available in scripting debug console
-export const Diagnostics = require('Diagnostics');
+// Debug Console
+const Diagnostics = require('Diagnostics');
 
-// Find the 2D Text Object in our Scene named 'SceneText' listed in the left panel
-// Hold the value of that object in a variable called 'textObject'
-const textObject = Scene.root.find('2dText0');
+// Find the 2D text object in our Scene named 'TheText' listed in the Scene panel on the left.
+// Use 'theText' to assign the .text property of 'TheText' 2D object.
+Scene.root.findFirst('TheText').then(theText => {
 
-// Get the scalar value from our 'ValueFromPatch' object listed in the right panel 'To Script' when script.js is selected
-// Hold the value in a variable called 'patchValue'
-const patchValue = Patches.getScalarValue('ValueFromPatch');
+    // Get the output from the 'PatchValue' created in the To Script bridge and updated in the Patch Editor.
+    Patches.outputs.getScalar('PatchValue').then(patchValue => {
 
-// Set the textObject text to the patchValue using the toString() method
-// Converts the patchValue to a strin, which is compatible with the textObject.text method.
-textObject.text = patchValue.toString();
+        // assign the .text property of 'theText' to the patchValue. 
+        // convert the patchValue scalar signal to a string using the .toString() method.
+        theText.text = patchValue.toString();
 
-// Display our Mouth Openness value in the Console
-Diagnostics.watch("Mouth Openness - ", patchValue);
+        // update the blink count in the Debug Console
+        Diagnostics.watch("Blink Count: ", patchValue);
+
+    });
+});
+
