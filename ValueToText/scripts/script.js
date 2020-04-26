@@ -13,16 +13,15 @@
 
 // This is an example script for v85+ to display blink count
 
-// Load modules
+// How to load in modules
 const Scene = require('Scene');
-// This module gives us access to objects in the Patch Editor
 const Patches = require('Patches');
-// Debug Console
-const Diagnostics = require('Diagnostics');
 
-// Find the 2D text object in our Scene named 'TheText' listed in the Scene panel on the left.
-// Use 'theText' to assign the .text property of 'TheText' 2D object.
-Scene.root.findFirst('TheText').then(theText => {
+Promise.all([
+    Scene.root.findFirst('TheText'),
+]).then(function (results) {
+    
+    const theText = results[0];
 
     // Get the output from the 'PatchValue' created in the To Script bridge and updated in the Patch Editor.
     Patches.outputs.getScalar('PatchValue').then(patchValue => {
@@ -35,5 +34,6 @@ Scene.root.findFirst('TheText').then(theText => {
         Diagnostics.watch("Blink Count: ", patchValue);
 
     });
+
 });
 
